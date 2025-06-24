@@ -170,7 +170,6 @@ def main():
                     bombs[n2]=None
                     beams[n]=None
                     bird.change_img(6, screen)
-                    
                     pg.display.update()
             beams = [beam for beam in beams if beam is not None]        
         bombs=[bomb for bomb in bombs if bomb is not None]        
@@ -185,16 +184,8 @@ def main():
                 pg.display.update()
                 time.sleep(1)
                 return
+       
 
-        # for i,bomb in enumerate(bombs):
-        #     if beam is not None:
-        #         if beam.rct.colliderect(bomb.rct): #  ビームと爆弾が衝突したら
-        #             beam=None
-        #             bombs[i]=None
-        #             bird.change_img(6, screen)
-        #             score.value+=1
-        
- 
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
