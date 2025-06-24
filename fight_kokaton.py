@@ -211,7 +211,7 @@ def main():
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
         for i,beam in enumerate(beams):
-            if check_bound(beam.rct)==(False,False): #  ビームが存在する時
+            if check_bound(beam.rct)==(False,False):  # ビームが存在する時
                 del beams[i]
             else:    
                 beam.update(screen)   
