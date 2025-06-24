@@ -7,6 +7,7 @@ import pygame as pg
 
 WIDTH = 1100  # ゲームウィンドウの幅
 HEIGHT = 650  # ゲームウィンドウの高さ
+NUM_OF_BOMBS=5
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -89,7 +90,6 @@ class Beam:
     こうかとんが放つビームに関するクラス
     """
     def __init__(self, bird:"Bird"):
-
         """
         ビーム画像Surfaceを生成する
         引数 bird：ビームを放つこうかとん（Birdインスタンス）
@@ -97,9 +97,9 @@ class Beam:
         self.img = pg.image.load(f"fig/beam.png")
         self.rct = self.img.get_rect()
         self.rct.centery = bird.rct.centery
-        self.rct.left = bird.rct.right #ビームの左座標＝工科トンの右座標
+        self.rct.left = bird.rct.right #ビームの左座標＝こうかとんの右座標
         self.vx, self.vy = +5, 0
-    
+
     def update(self, screen: pg.Surface):
         """
         ビームを速度ベクトルself.vx, self.vyに基づき移動させる
@@ -147,6 +147,10 @@ def main():
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
     bomb = Bomb((255, 0, 0), 10)
+    bombs=[] #  爆弾用の空のリスト
+    for _ in range(NUM_OF_BOMBS):
+        bombs.append(Bomb((255,0,0),10))
+    #  内包表記    
     beam = None  # ゲーム初期化時にはビームは存在しない
     clock = pg.time.Clock()
     tmr = 0
@@ -158,8 +162,8 @@ def main():
                 # スペースキー押下でBeamクラスのインスタンス生成
                 beam = Beam(bird)            
         screen.blit(bg_img, [0, 0])
-
-        if bomb is not None:
+        
+        for bomb in bombs:
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
@@ -167,19 +171,20 @@ def main():
                 time.sleep(1)
                 return
 
-        if bomb is not None:
+        for i,bomb in enumerate(bombs):
             if beam is not None:
-                if beam.rct.colliderect(bomb.rct):
-                    beam = None
-                    bomb = None  
-                    bird.change_img(6,screen)
+                if beam.rct.colliderect(bomb.rct): #  ビームと爆弾が衝突したら
+                    beam=None
+                    bombs[i]=None
+                    bird.change_img(6, screen)
+        bombs=[bomb for bomb in bombs if bomb is not None]
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
-        if beam is not None:
-            beam.update(screen)  
-        if bomb is not None:
-            bomb.update(screen) 
+        if beam is not None: #  ビームが存在する時
+            beam.update(screen)   
+        for bomb in bombs:    
+            bomb.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
