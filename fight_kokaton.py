@@ -145,7 +145,6 @@ def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("fig/pg_bg.jpg")
-    score = Score()
     bird = Bird((300, 200))
     bomb = Bomb((255, 0, 0), 10)
     bombs=[] #  爆弾用の空のリスト
@@ -171,7 +170,7 @@ def main():
                     bombs[n2]=None
                     beams[n]=None
                     bird.change_img(6, screen)
-                    score.value+=1
+                    
                     pg.display.update()
             beams = [beam for beam in beams if beam is not None]        
         bombs=[bomb for bomb in bombs if bomb is not None]        
@@ -195,8 +194,7 @@ def main():
         #             bird.change_img(6, screen)
         #             score.value+=1
         
-
-        score.update(screen)
+ 
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
