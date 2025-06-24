@@ -8,9 +8,8 @@ import pygame as pg
 WIDTH = 1100  # ゲームウィンドウの幅
 HEIGHT = 650  # ゲームウィンドウの高さ
 NUM_OF_BOMBS=5
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     """
     オブジェクトが画面内or画面外を判定し，真理値タプルを返す関数
@@ -110,6 +109,13 @@ class Beam:
 
 class Score:
    def __init__(self):
+        """
+        ・Beamクラスのインスタンスを複数扱うための空のリストを作る
+        ・スペースキー押下でBeamインスタンス生成、リストにappend
+        ・リストの要素１つずつに対して爆弾と衝突判定し、衝突しよ要素はNoneとする
+        ・ビームリストに対して、要素がNoneでないものだけのリストに更新
+        ・画面の範囲外に出たらリストから削除する ← しないとリストが大きくなる
+        """
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.color = (0, 0, 255)
         self.value = 0
